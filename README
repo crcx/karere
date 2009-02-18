@@ -15,4 +15,25 @@ How it Works:
      a) Checks an mbox-format email account
      b) Update a specific file with the subject of any
         recieved message
+     c) Should be set to run on a regular interval
+---------------------------------------------------------------
+The split of Karere into two parts was done to make deployment
+less troublesome for me.
+
+Specifically, I have a VPS (virtual private server) which I
+use for some of my web hosting and email needs. This allows me
+to run custom apps, but doesn't permit IRC access.
+
+I run the email side on the server, with a set of cron jobs
+that check a specific mailbox every 30 seconds. Any messages
+get placed in a specific file on one of my domains.
+
+The irc bot runs on another machine, which does have IRC
+access, but doesn't provide email reciept (it is configured
+to forward my email to another account). I could also run the
+irc bot on my local machine if the need arises.
+
+The split will also be beneficial as it permits multiple
+accounts, one per bot, and allows for a distributed load
+across multiple servers.
 ---------------------------------------------------------------
