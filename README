@@ -1,0 +1,18 @@
+Karere
+---------------------------------------------------------------
+This is a set of programs that provide access to IRC via any
+email client.
+---------------------------------------------------------------
+How it Works:
+
+  1) IRC bot
+     a) Watches a channel for messages, forwarding any
+        messages to a specific email address
+     b) Monitors a specific file
+     c) When the file contents change, post the contents
+        as a message to the channel
+  2) Email handler
+     a) Checks an mbox-format email account
+     b) Update a specific file with the subject of any
+        recieved message
+---------------------------------------------------------------
