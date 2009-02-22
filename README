@@ -12,7 +12,7 @@ How it Works:
      c) When the file contents change, post the contents
         as a message to the channel
   2) Email handler
-     a) Checks an mbox-format email account
+     a) Checks an imap email account (gmail)
      b) Update a specific file with the subject of any
         recieved message
      c) Should be set to run on a regular interval
