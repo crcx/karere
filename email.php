@@ -1,4 +1,4 @@
-<?php
+<?
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Karere
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -7,43 +7,35 @@
    This code was written by Charles Childers and is gifted to
    the public domain.
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-require_once 'mbox.php';
 
+$msg = '/path/to/message';
+$email = 'name@gmail.com';
+$pass = 'password';
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Configuration
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-$mailbox = '/var/mail/karere';
-$msg     = '/home/karere/htdocs/messgage.txt';
+$mbox = imap_open ("{imap.gmail.com:993/imap/ssl}INBOX", $email, $pass)
+  or die("can't connect: " . imap_last_error());
 
+$headers = @imap_headers($mbox) or die("Couldn't get emails");
 
+$numEmails = sizeof($headers);
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Code begins
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-$filter = array("<", ">");
-$mbox = new Mail_Mbox($mailbox);
-$mbox->open();
+echo $numEmails;
 
-for ($n = 0; $n < $mbox->size(); $n++)
+if ($numEmails > 0)
 {
-  $type = "none";
-  $message = $mbox->get($n);
-
-  preg_match('/Return-path: (.*)$/m', $message, $returns);
-  $who = str_replace($filter, "", $returns[1]);
-
-  $a = preg_match('/Subject: (.*)$/m', $message, $matches);
-  $subject = $matches[1];
-  if ($a == 1)
+  for($i = 1; $i < $numEmails+1; $i++)
   {
-    $type = "chat";
+    $mailHeader = @imap_headerinfo($mbox, $i);
+    $from = $mailHeader->fromaddress;
+    $subject = strip_tags($mailHeader->subject);
+    $date = $mailHeader->date;
+
     $h = fopen($msg, "w");
     fwrite($h, $subject);
     fclose($h);
-  }
-  $mbox->remove($n);
-}
 
-$mbox->close();
+    imap_delete($mbox, $i);
+  }
+}
+imap_close($mbox);
 ?>
