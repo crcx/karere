@@ -59,6 +59,7 @@ else
       $line = substr($line, $where);
       $where = strpos($line, ":");
       $msg = substr($line, $where);
+      $header = "";
       mail($to, $chan, $who . " " . $msg, $header);
     }
 
