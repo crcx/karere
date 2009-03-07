@@ -1,39 +1,29 @@
 Karere
 ---------------------------------------------------------------
-This is a set of programs that provide access to IRC via any
-email client.
+This is a family of applications that provide IM over email.
+
+How it works (user perspective):
+
+ - Run this code on your computer
+ - Each IM gets sent to you as an email
+ - Send email to a specific address to reply or start
+   a conversation
+   - Subject = destination
+   - Body = message
+
+Karere acts as a specialized client that translates between
+IM protocols and email.
 ---------------------------------------------------------------
-How it Works:
+Requirements:
 
-  1) IRC bot
-     a) Watches a channel for messages, forwarding any
-        messages to a specific email address
-     b) Monitors a specific file
-     c) When the file contents change, post the contents
-        as a message to the channel
-  2) Email handler
-     a) Checks an imap email account (gmail)
-     b) Update a specific file with the subject of any
-        recieved message
-     c) Should be set to run on a regular interval
----------------------------------------------------------------
-The split of Karere into two parts was done to make deployment
-less troublesome for me.
+  - Email account (to recieve messages from server)
+  - Email account (to send messages to server)
+  - These must be separate accounts. Do not use the sender
+    account for anything else.
 
-Specifically, I have a VPS (virtual private server) which I
-use for some of my web hosting and email needs. This allows me
-to run custom apps, but doesn't permit IRC access.
+  - PHP 5
+    - With IMAP and socket extensions
+    - With working mail() function
 
-I run the email side on the server, with a set of cron jobs
-that check a specific mailbox every 30 seconds. Any messages
-get placed in a specific file on one of my domains.
-
-The irc bot runs on another machine, which does have IRC
-access, but doesn't provide email reciept (it is configured
-to forward my email to another account). I could also run the
-irc bot on my local machine if the need arises.
-
-The split will also be beneficial as it permits multiple
-accounts, one per bot, and allows for a distributed load
-across multiple servers.
+This is only tested on Linux and OS X systems at present.
 ---------------------------------------------------------------
