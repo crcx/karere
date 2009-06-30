@@ -36,7 +36,6 @@ $channel    = "";    /* The channel you want to join.      */
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// define your variables
 $host = "irc.freenode.net";
 $port=6667;
 $ident="Karere Client";
@@ -48,6 +47,7 @@ $ident="Karere Client";
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 $readbuffer="";
+$send = "yes";
 $nope = "false";
 $start = time();
 set_time_limit(0);
@@ -103,7 +103,8 @@ while (!feof($fp))
       $where = strpos($line, ":");
       $msg = substr($line, $where);
       $header = "From: Karere <".$reader.">\r\n";
-      mail($sendTo, $parts[2], $who . " in " . $parts[2] . " said " . $msg, $header);
+      if ($send == "yes")
+        mail($sendTo, $parts[2], $who . " in " . $parts[2] . " said " . $msg, $header);
     }
 
     /* The server will send PING requests on occasion.   */
@@ -153,7 +154,17 @@ while (!feof($fp))
 
           /* Send the message to the channel */
           echo $subject . "\n" . $body . "\n";
-          fwrite($fp, "PRIVMSG ".$subject." :".$body."\r\n");
+
+          if ($subject != "@off" && $subject != "&on")
+            fwrite($fp, "PRIVMSG ".$subject." :".$body."\r\n");
+          if ($subject == "@off")
+          {
+            $send = "no";
+          }
+          if ($subject == "@on")
+          {
+            $send = "yes";
+          }
           imap_delete($mbox, $i);
         }
       }
