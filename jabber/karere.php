@@ -89,14 +89,22 @@ try
           if ($body == "")
             $body = imap_fetchbody($mbox, $i, "1");
           $body = ereg_replace("/\n\r|\r\n|\n|\r/", " ", $body);
-          echo $subject . ":" . $body . "\n";
-          $conn->message($subject, $body);
+        $body=substr($body, 0, strpos($body, "------")); //Filter original from reply
+        $body=substr($body, 0, strpos($body, "--")); //Filter below signature
+        $body=quoted_printable_decode($body);
+        $body=str_replace("= ","",$body);
+        $body=preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", " ", $body); //This kills blank lines and makes them spaces
+        $subject=str_replace("Re: jabber: ","",$subject); //This rewrites the incoming subject so a person can just reply
+        echo $subject . ":" . $body . "\n";
+        unset($xx2);
+          $conn->message("$subject","$body");
           imap_delete($mbox, $i);
         }
       }
       imap_close($mbox);
     }
     sleep(1);
+
   }
 }
 catch(XMPPHP_Exception $e)
