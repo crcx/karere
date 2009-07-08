@@ -153,10 +153,11 @@ while (!feof($fp))
           $body = ereg_replace("/\n\r|\r\n|\n|\r/", " ", $body);
 
           /* Send the message to the channel */
-          echo $subject . "\n" . $body . "\n";
-
-          if ($subject != "@off" && $subject != "&on")
+          echo $subject . " :: " . $body . "\n";
+          if ($subject != "@off" && $subject != "@on" && $subject != "@join" && $subject != "@leave")
             fwrite($fp, "PRIVMSG ".$subject." :".$body."\r\n");
+
+          /* Commands */
           if ($subject == "@off")
           {
             $send = "no";
@@ -165,6 +166,15 @@ while (!feof($fp))
           {
             $send = "yes";
           }
+          if ($subject == "@join")
+          {
+            fwrite($fp, "JOIN ".$body."\r\n");
+          }
+          if ($subject == "@leave")
+          {
+            fwrite($fp, "PART ".$body."\r\n");
+          }
+
           imap_delete($mbox, $i);
         }
       }
